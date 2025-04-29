@@ -1,4 +1,5 @@
 import { twMerge } from 'tailwind-merge';
+import { TextButton } from '../components/TextButton';
 
 const cardData = [
   {
@@ -78,16 +79,7 @@ export const FeaturesCardsSection = () => {
                 </h3>
                 <p className='text-zinc-400 text-lg mt-4'>{description}</p>
                 <div className='flex justify-between mt-12'>
-                  <button
-                    className={twMerge(
-                      'text-fuchsia-500 text-sm font-heading font-extrabold uppercase tracking-wider',
-                      color === 'lime' && 'text-lime-500',
-                      color === 'cyan' && 'text-cyan-500',
-                      color === 'violet' && 'text-violet-500'
-                    )}
-                  >
-                    Learn More
-                  </button>
+                  <TextButton color={color}>Learn More</TextButton>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
