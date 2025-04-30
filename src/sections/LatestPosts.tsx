@@ -1,25 +1,77 @@
-export const LatestPosts = () => {
+import type { CollectionEntry } from "astro:content";
+import { getPostColorFromCategory } from "../utils/postUtils";
+
+import { Card } from "../components/Card";
+import { Tag } from "../components/Tag";
+import { CutCornerButton } from "../components/CutCornerButton";
+import { twMerge } from "tailwind-merge";
+
+export const LatestPosts = (props: {
+  latestPosts: CollectionEntry<"blog">[];
+}) => {
+  const { latestPosts } = props;
+
   return (
-    <section>
-      <div className='container'>
-        <h2>Your portal to everything blockchain.</h2>
-        <p>
-          Keep up with the newest trends, updates, and insights in the
-          blockchain world, updated weekly.
-        </p>
-        <div>
-          <div>
-            <div>Technology</div>
-            <h3>Regulatory Challenges Facing Blockchain</h3>
-            <p>
-              Understanding the Regulatory landscape surrounding blockchain and
-              what it means for the future of this texhnology.
-            </p>
-            <div>
-              <button>Read more</button>
-              <div>arrow</div>
-            </div>
+    <section className="py-60">
+      <div className="container">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-black text-center">
+            Your portal to everything blockchain.
+          </h2>
+          <p className="text-zinc-400 text-xl lg:text-2xl mt-8 text-center">
+            Keep up with the newest trends, updates, and insights in the
+            blockchain world, updated weekly.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 md:mt-24">
+          <div className="flex flex-col gap-8">
+            {latestPosts.map(
+              ({ data: { title, description, category } }, postIndex) => (
+                <Card
+                  key={postIndex}
+                  buttonText="Read More"
+                  color={getPostColorFromCategory(category)}
+                  className={twMerge(
+                    (postIndex === 1 || postIndex === 3) && "md:hidden"
+                  )}
+                >
+                  <Tag color={getPostColorFromCategory(category)}>
+                    {category}
+                  </Tag>
+                  <h3 className="text-3xl font-heading font-black mt-3">
+                    {title}
+                  </h3>
+                  <p className="text-zinc-400 text-lg mt-6">{description}</p>
+                </Card>
+              )
+            )}
           </div>
+          <div className="hidden md:flex flex-col gap-8 mt-16">
+            {latestPosts.map(
+              ({ data: { title, description, category } }, index) => (
+                <Card
+                  key={index}
+                  buttonText="Read More"
+                  color={getPostColorFromCategory(category)}
+                  className={twMerge(
+                    (index === 0 || index === 2) && "md:hidden"
+                  )}
+                >
+                  <Tag color={getPostColorFromCategory(category)}>
+                    {category}
+                  </Tag>
+                  <h3 className="text-3xl font-heading font-black mt-3">
+                    {title}
+                  </h3>
+                  <p className="text-zinc-400 text-lg mt-6">{description}</p>
+                </Card>
+              )
+            )}
+          </div>
+        </div>
+
+        <div className="flex justify-center mt-48 md:mt-32">
+          <CutCornerButton>Read The Blog</CutCornerButton>
         </div>
       </div>
     </section>

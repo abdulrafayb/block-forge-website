@@ -1,10 +1,24 @@
 ---
-import DefaultLayout from '../layouts/Default.astro';
-import { HeaderSection } from '../sections/Header.tsx';
-import { HeroSection } from '../sections/Hero.tsx';
-import { FeaturesCardsSection } from '../sections/FeaturesCards.tsx';
-import { FeaturesGrid } from '../sections/FeaturesGrid.tsx';
-import { LatestPosts } from '../sections/LatestPosts.tsx';
+import DefaultLayout from "../layouts/Default.astro";
+import { getCollection } from "astro:content";
+
+import { HeaderSection } from "../sections/Header.tsx";
+import { HeroSection } from "../sections/Hero.tsx";
+import { FeaturesCardsSection } from "../sections/FeaturesCards.tsx";
+import { FeaturesGrid } from "../sections/FeaturesGrid.tsx";
+import { LatestPosts } from "../sections/LatestPosts.tsx";
+import { TestimonialsSection } from "../sections/TestimonialsSection.tsx";
+import { CallToAction } from "../sections/CallToAction.tsx";
+import { Footer } from "../sections/Footer.tsx";
+
+const posts = await getCollection("blog");
+
+const latestPosts = posts
+  .sort((a, b) => {
+    if (a.data.pubDate.valueOf() === b.data.pubDate.valueOf()) return 0;
+    return a.data.pubDate.valueOf() > b.data.pubDate.valueOf() ? -1 : 1;
+  })
+  .slice(0, 4);
 ---
 
 <DefaultLayout>
@@ -12,5 +26,8 @@ import { LatestPosts } from '../sections/LatestPosts.tsx';
   <HeroSection />
   <FeaturesCardsSection />
   <FeaturesGrid />
-  <LatestPosts />
+  <LatestPosts latestPosts={latestPosts} />
+  <TestimonialsSection />
+  <CallToAction />
+  <Footer />
 </DefaultLayout>
