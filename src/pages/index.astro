@@ -23,7 +23,7 @@ const latestPosts = posts
 
 <DefaultLayout>
   <HeaderSection />
-  <HeroSection />
+  <HeroSection client:load />
   <FeaturesCardsSection />
   <FeaturesGrid />
   <LatestPosts latestPosts={latestPosts} />
@@ -31,3 +31,5 @@ const latestPosts = posts
   <CallToAction />
   <Footer />
 </DefaultLayout>
+
+<!-- the way that astro works is that it is a server side framework or atleast by default it is, which means all the react components that we defined above get statically rendered but they don't come with any javascript unless we tell it to also load on the client, in our case we want the hero section to Load on the client side we need to add a directive as we have above which ensures that the javascript loads on the client and that any interactivity can work on the client side -->
