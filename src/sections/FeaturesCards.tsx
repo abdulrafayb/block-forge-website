@@ -1,6 +1,7 @@
-import { twMerge } from "tailwind-merge";
-import { TextButton } from "../components/TextButton";
 import { Card } from "../components/Card";
+
+import { twMerge } from "tailwind-merge";
+import { useEffect, useState } from "react";
 
 const cardData = [
   {
@@ -34,6 +35,20 @@ const cardData = [
 ];
 
 export const FeaturesCardsSection = () => {
+  const [selectedCardIndex, setSelectedCardIndex] = useState(1);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    if (isHovered) return;
+    const timeout = setTimeout(() => {
+      setSelectedCardIndex((curr) =>
+        curr === cardData.length - 1 ? 0 : curr + 1
+      );
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, [selectedCardIndex, isHovered]);
+
   return (
     <section className="py-24 md:-mt-28 overflow-x-clip">
       <div className="container">
@@ -43,31 +58,45 @@ export const FeaturesCardsSection = () => {
         <div className="flex mt-36 lg:mt-48">
           <div className="flex flex-none gap-8">
             {cardData.map(({ image, title, description, color }) => (
-              <Card key={title} className="max-w-xs md:max-w-md">
-                <div className="flex justify-center -mt-28">
-                  <div className="relative inline-flex">
-                    <div className="absolute bg-zinc-950/70 w-full h-4 top-[calc(100%+16px)] [mask-image:radial-gradient(closest-side,black,transparent)] rounded-[100%] group-hover:bg-zinc-950/30 transition duration-300"></div>
-                    <img
-                      src={image}
-                      alt="Pill Image"
-                      className="size-40 group-hover:-translate-y-6 transition duration-300"
-                    />
+              <div
+                key={title}
+                className="inline-flex transition-all duration-500"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                style={{
+                  transform: `translateX(calc((-100% - 2rem) * ${selectedCardIndex}))`,
+                }}
+              >
+                <Card className="max-w-xs md:max-w-md" color={color}>
+                  <div className="flex justify-center -mt-28">
+                    <div className="relative inline-flex">
+                      <div className="absolute bg-zinc-950/70 w-full h-4 top-[calc(100%+16px)] [mask-image:radial-gradient(closest-side,black,transparent)] rounded-[100%] group-hover:bg-zinc-950/30 transition duration-300"></div>
+                      <img
+                        src={image}
+                        alt="Pill Image"
+                        className="size-40 group-hover:-translate-y-6 transition duration-300"
+                      />
+                    </div>
                   </div>
-                </div>
-                <h3 className="text-3xl font-heading font-black mt-12">
-                  {title}
-                </h3>
-                <p className="text-zinc-400 text-lg mt-4">{description}</p>
-              </Card>
+                  <h3 className="text-3xl font-heading font-black mt-12">
+                    {title}
+                  </h3>
+                  <p className="text-zinc-400 text-lg mt-4">{description}</p>
+                </Card>
+              </div>
             ))}
           </div>
         </div>
         <div className="flex justify-center mt-10">
           <div className="bg-zinc-950 p-2.5 inline-flex gap-4 rounded-full">
-            {cardData.map(({ title }) => (
+            {cardData.map(({ title }, cardIndex) => (
               <div
                 key={title}
-                className="bg-zinc-500 size-2.5 cursor-pointer rounded-full"
+                className={twMerge(
+                  "bg-zinc-500 size-2.5 cursor-pointer rounded-full",
+                  cardIndex === selectedCardIndex && "bg-zinc-300"
+                )}
+                onClick={() => setSelectedCardIndex(cardIndex)}
               ></div>
             ))}
           </div>
